@@ -22,8 +22,8 @@ COPY --from=build /app/dist /app/dist
 # Устанавливаем сервер для раздачи статики (например, http-server)
 RUN npm install -g http-server
 
-# Открываем порт 5000 (по умолчанию http-server)
-EXPOSE 5000
+# Открываем порт 5173 (по умолчанию http-server)
+EXPOSE 5173
 
 # Запускаем сервер для отдачи статики
-CMD ["http-server", "dist", "-p", "5000"]
+CMD ["http-server", "dist", "-p", "5173"]
