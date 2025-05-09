@@ -1,23 +1,29 @@
-# Используем официальный образ для Node.js
-FROM node:18
+# Этап сборки (build stage)
+FROM node:18 AS build
 
-# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Копируем package.json и package-lock.json (или yarn.lock) в контейнер
+# Копируем package.json и устанавливаем зависимости
 COPY package*.json ./
-
-# Устанавливаем зависимости
 RUN npm install
 
-# Копируем все файлы проекта в контейнер
+# Копируем остальной код и билдим
 COPY . .
-
-# Строим проект
 RUN npm run build
 
-# Открываем порт для приложения (по умолчанию 3000, можно изменить)
-EXPOSE 5173
+# Этап запуска (production stage)
+FROM node:18
 
-# Запускаем приложение
-CMD ["npm", "run", "start"]
+WORKDIR /app
+
+# Копируем билд из этапа сборки
+COPY --from=build /app/dist /app/dist
+
+# Устанавливаем сервер для раздачи статики (например, http-server)
+RUN npm install -g http-server
+
+# Открываем порт 5000 (по умолчанию http-server)
+EXPOSE 5000
+
+# Запускаем сервер для отдачи статики
+CMD ["http-server", "dist", "-p", "5000"]
