@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"  # Публикуем порт приложения
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - .:/app  # Монтируем локальные файлы в контейнер для разработки
+    restart: always
