@@ -27,7 +27,7 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -i ~/.ssh/id_ed25519 root@${{ secrets.SERVER_IP }} << 'EOF'
-            cd /var/www/it-park/itpark-front
+            cd /var/www/itpark-front/it-park
             git pull origin main
             sudo docker compose up --build -d
           EOF
