@@ -3,27 +3,25 @@ FROM node:18 AS build
 
 WORKDIR /app
 
-# Копируем package.json и устанавливаем зависимости
 COPY package*.json ./
 RUN npm install
 
-# Копируем остальной код и билдим
 COPY . .
 RUN npm run build
 
 # Этап запуска (production stage)
 FROM node:18
 
-WORKDIR /app
+# Ставим рабочую директорию на финальном этапе
+WORKDIR /dist
 
-# Копируем билд из этапа сборки
-COPY --from=build /app/dist /app/dist
+# Копируем сборку
+COPY --from=build /app/dist /dist
 
-# Устанавливаем сервер для раздачи статики (например, http-server)
+# Устанавливаем http-server
 RUN npm install -g http-server
 
-# Открываем порт 5173 (по умолчанию http-server)
 EXPOSE 5173
 
-# Запускаем сервер для отдачи статики
-CMD ["http-server", "dist", "-p", "5173"]
+# ВАЖНО: точка (.) — значит запускать из текущей директории /dist
+CMD ["http-server", ".", "-p", "5173"]
