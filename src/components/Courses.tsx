@@ -43,7 +43,7 @@ const Courses = () => {
       <div className="mx-auto px-6 lg:px-16 max-w-7xl">
         <div className="text-center mb-12 flex flex-col items-center gap-2 md:gap-4">
           <h2 className="text-3xl md:text-4xl  font-extrabold text-gray-800 mb-2">
-            Наши Курсы
+            Наши Курсы 
           </h2>
           <p className="text-lg text-gray-600">
             Освойте новые навыки и станьте профессионалом в IT индустрии.
