@@ -1,29 +1,18 @@
-# Этап сборки (build stage)
-FROM node:18 AS build
+# Этап сборки
+FROM node:18 AS builder
 
 WORKDIR /app
-
-# Копируем package.json и устанавливаем зависимости
-COPY package*.json ./
-RUN npm install
-
-# Копируем остальной код и билдим
 COPY . .
+
+RUN npm install
 RUN npm run build
 
-# Этап запуска (production stage)
-FROM node:18
+# Этап продакшена
+FROM nginx:alpine
 
-WORKDIR /app
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
-# Копируем билдированные файлы
-COPY --from=build /app/dist /app/dist
+EXPOSE 80
 
-# Устанавливаем сервер для раздачи статики (например, http-server)
-RUN npm install -g http-server
-
-# Открываем порт 5173 (по умолчанию http-server)
-EXPOSE 5173
-
-# Запускаем сервер для отдачи статики
-CMD ["http-server", "dist", "-p", "5173"]
+CMD ["nginx", "-g", "daemon off;"]
