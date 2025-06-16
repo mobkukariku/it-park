@@ -11,7 +11,7 @@ const Navbar = () => {
 	const toggleMenu = () => setIsMenuOpen(prev => !prev)
 
 	return (
-		<header className=' bg-gray-50 border'>
+		<header className=' bg-gray-50 border py-3'>
 			<div className='flex items-center justify-between px-6 md:px-10 lg:px-[120px] max-h-24'>
 				<Link to='/' className='cursor-pointer'>
 					<img
